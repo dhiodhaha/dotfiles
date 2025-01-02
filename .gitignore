@@ -1,0 +1,7 @@
+.config/.wrangler/config/default.toml
+.env
+.aws
+.zsh_history
+.bash_history
+.config/.wrangler/logs
+.config/.wrangler/
