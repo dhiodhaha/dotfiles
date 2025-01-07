@@ -1,7 +1,7 @@
 {
 	"preferences": {
 		"typescript": true,
-		"eslint": true,
+		"eslint": false,
 		"tailwind": true,
 		"srcDir": true,
 		"app": true,
