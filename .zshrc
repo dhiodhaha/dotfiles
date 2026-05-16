@@ -94,6 +94,18 @@ zstyle ':completion:*:warnings' format '%F{yellow}No matches%f'
 
 source $ZSH/oh-my-zsh.sh
 
+# Ghostty-like key behavior where the terminal sends enhanced key sequences.
+insert-newline-or-accept() {
+  LBUFFER+=$'\n'
+}
+zle -N insert-newline-or-accept
+bindkey '^[[1;2A' up-line-or-beginning-search
+bindkey '^[[1;2B' down-line-or-beginning-search
+bindkey '^[[1;2C' forward-word
+bindkey '^[[1;2D' backward-word
+bindkey '^[[13;2u' insert-newline-or-accept
+bindkey '^[^M' insert-newline-or-accept
+
 # User configuration
 [[ -o interactive && -r ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
