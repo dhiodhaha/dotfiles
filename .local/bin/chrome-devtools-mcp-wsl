@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+port="${CHROME_DEBUG_PORT:-9222}"
+"$HOME/.local/bin/chrome-debug" >/dev/null
+
+host_ip="$(ip route | awk '/^default / {print $3; exit}')"
+if [[ -z "$host_ip" ]]; then
+  host_ip="127.0.0.1"
+fi
+
+exec npx -y chrome-devtools-mcp@latest \
+  --browserUrl "http://${host_ip}:${port}" \
+  --no-usage-statistics

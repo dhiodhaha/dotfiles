@@ -1,7 +1,39 @@
-.config/.wrangler/config/default.toml
 .env
+.env.*
 .aws
+.ssh
+.gnupg
+.npmrc
+.netrc
 .zsh_history
 .bash_history
-.config/.wrangler/logs
+
+# App auth/session state. Keep these out of portable dotfiles.
+.codex/auth.json
+.codex/history.jsonl
+.codex/installation_id
+.codex/log/
+.codex/cache/
+.codex/.tmp/
+.codex/state_*.sqlite*
+.codex/logs_*.sqlite*
+.codex/shell_snapshots/
+.config/Antigravity/
+.config/gh/hosts.yml
+.config/dconf/
+.config/pulse/
 .config/.wrangler/
+.config/google-chrome*/
+.config/create-next-app-nodejs/
+.config/nextjs-nodejs/
+.config/grit/
+
+# Generated editor/runtime state.
+.config/nvim/.lazy.lua
+.config/nvim/lazy-lock.json
+.config/zed/db/
+.local/share/
+.cache/
+
+# Windows metadata copied through /mnt/c.
+*:Zone.Identifier

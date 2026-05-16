@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+app="/mnt/c/Users/dopamine/AppData/Local/Programs/Antigravity/Antigravity.exe"
+distro="${WSL_DISTRO_NAME:-Ubuntu}"
+
+if [[ $# -eq 0 ]]; then
+  set -- .
+fi
+
+args=()
+for arg in "$@"; do
+  if [[ "$arg" == -* ]]; then
+    args+=("$arg")
+  elif [[ -e "$arg" ]]; then
+    args+=("$(realpath "$arg")")
+  else
+    args+=("$arg")
+  fi
+done
+
+exec "$app" --remote "wsl+${distro}" "${args[@]}"

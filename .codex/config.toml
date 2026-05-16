@@ -1,0 +1,30 @@
+[projects."/home/dhio"]
+trust_level = "trusted"
+
+[tui]
+theme = "linear-dark-dhio"
+use_theme_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.5" = 1
+
+[plugins."figma@openai-curated"]
+enabled = true
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[mcp_servers.serena]
+command = "uvx"
+args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
+
+[mcp_servers.caveman-mcp]
+command = "uvx"
+args = ["caveman-mcp"]
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"
+
+[mcp_servers.chrome-devtools]
+command = "/mnt/c/Windows/System32/cmd.exe"
+args = ["/c", "npx.cmd", "-y", "chrome-devtools-mcp@latest", "--browserUrl", "http://127.0.0.1:9222", "--no-usage-statistics"]

@@ -1,9 +1,8 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+if [[ -t 1 && -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+[[ -t 1 ]] || export POWERLEVEL9K_DISABLE_GITSTATUS=true
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
@@ -15,7 +14,11 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+if [[ -o interactive ]]; then
+  ZSH_THEME="powerlevel10k/powerlevel10k"
+else
+  ZSH_THEME=""
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -82,52 +85,89 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use web-sear
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+[[ -o interactive && -r ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# bun completions
-[ -s "/home/dhio/.bun/_bun" ] && source "/home/dhio/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/home/dhio/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.grit/bin"
+  /usr/local/sbin
+  /usr/local/bin
+  /usr/sbin
+  /usr/bin
+  /sbin
+  /bin
+  /usr/games
+  /usr/local/games
+  /usr/lib/wsl/lib
+)
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh" --no-use
+  nvm use default --silent >/dev/null 2>&1
+fi
+[[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+
+export BUN_INSTALL="$HOME/.bun"
+[[ -d "$BUN_INSTALL/bin" ]] && path=("$BUN_INSTALL/bin" $path)
+[[ -s "$BUN_INSTALL/_bun" ]] && source "$BUN_INSTALL/_bun"
+
+windows_tool_paths=(
+  "/mnt/c/Users/dopamine/AppData/Local/Programs/Antigravity/bin"
+  "/mnt/c/Users/dopamine/AppData/Local/Programs/Microsoft VS Code/bin"
+  "/mnt/c/Users/dopamine/AppData/Local/Programs/cursor/resources/app/bin"
+  "/mnt/c/Users/dopamine/AppData/Local/Programs/Zed/bin"
+  "/mnt/c/Users/dopamine/AppData/Local/Microsoft/WindowsApps"
+)
+
+for tool_path in $windows_tool_paths; do
+  [[ -d "$tool_path" ]] && path+=("$tool_path")
+done
+unset tool_path windows_tool_paths
+
+typeset -U path
+export PATH
+
+# Do not prompt for SSH key passphrases on every new terminal tab.
+# Keychain will reuse already-loaded keys and silently skip locked keys.
+if command -v keychain >/dev/null 2>&1; then
+  eval "$(keychain --eval --quick --quiet --noask --agents ssh id_rsa id_ed25519 2>/dev/null)"
+fi
+
+export EDITOR=nvim
+export VISUAL=nvim
+alias agy=antigravity
+alias aw=agw
+alias zedw=zed
+
+# Keep Antigravity's Windows WSL launcher patched after product updates.
+if command -v patch-antigravity-wsl >/dev/null 2>&1; then
+  { patch-antigravity-wsl >/dev/null 2>&1 &! }
+fi
+
+# Productivity CLI integrations
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
+
+alias ls='eza --group-directories-first --icons=auto'
+alias ll='eza -la --group-directories-first --icons=auto --git'
+alias lt='eza --tree --level=2 --group-directories-first --icons=auto'
+alias cat='batcat --paging=never'
+alias lg='lazygit'
+alias yz='yazi'
+alias grep='rg'
+alias find='fd'
+alias cd..='cd ..'
+alias zn='command zn'
+alias zdev='command zdev'
+
+ff() {
+  local file
+  file=$(fd --type f --hidden --exclude .git | fzf --preview 'batcat --color=always --style=numbers --line-range=:200 {}' --height=80% --layout=reverse --border) || return
+  "$EDITOR" "$file"
+}
+
+croot() {
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null) && cd "$root"
+}

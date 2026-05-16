@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# clipaste WSL shim: lets terminal AI tools read Windows clipboard images.
+
+set -euo pipefail
+
+REAL_XCLIP="/usr/bin/xclip"
+WIN_IMAGE="$HOME/.local/bin/win-clipboard-image"
+
+case "$*" in
+  *"-selection clipboard"*"-t TARGETS"*"-o"*|*"-sel clip"*"-t TARGETS"*"-o"*)
+    if "$WIN_IMAGE" probe 2>/dev/null; then
+      printf 'TARGETS\nimage/png\n'
+      exit 0
+    fi
+    ;;
+  *"-selection clipboard"*"-t image/png"*"-o"*|*"-sel clip"*"-t image/png"*"-o"*)
+    image_path="$("$WIN_IMAGE" save 2>/dev/null)"
+    [ -n "$image_path" ] && exec cat "$image_path"
+    exit 1
+    ;;
+esac
+
+if [ -x "$REAL_XCLIP" ]; then
+  exec "$REAL_XCLIP" "$@"
+fi
+
+printf 'xclip not found\n' >&2
+exit 1

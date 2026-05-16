@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# clipaste WSL shim: Wayland-compatible image paste bridge.
+
+set -euo pipefail
+
+REAL_WL_PASTE="/usr/bin/wl-paste"
+WIN_IMAGE="$HOME/.local/bin/win-clipboard-image"
+
+case "$*" in
+  *"--list-types"*)
+    if "$WIN_IMAGE" probe 2>/dev/null; then
+      printf 'image/png\ntext/plain\n'
+      exit 0
+    fi
+    ;;
+  *"--type image/"*|*"-t image/"*)
+    image_path="$("$WIN_IMAGE" save 2>/dev/null)"
+    [ -n "$image_path" ] && exec cat "$image_path"
+    exit 1
+    ;;
+esac
+
+if [ -x "$REAL_WL_PASTE" ]; then
+  exec "$REAL_WL_PASTE" "$@"
+fi
+
+printf 'wl-paste not found\n' >&2
+exit 1

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Probe or export the Windows clipboard image for WSL terminal AI tools.
+
+set -euo pipefail
+
+mode="${1:-save}"
+ps="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+
+win_to_wsl_path() {
+  local path="${1//$'\r'/}"
+  path="${path//$'\n'/}"
+  if [[ "$path" =~ ^([A-Za-z]):\\(.*)$ ]]; then
+    local drive="${BASH_REMATCH[1],,}"
+    local rest="${BASH_REMATCH[2]//\\//}"
+    printf '/mnt/%s/%s\n' "$drive" "$rest"
+    return 0
+  fi
+  return 1
+}
+
+probe_clipboard() {
+  "$ps" -NoProfile -STA -ExecutionPolicy Bypass -Command '
+Add-Type -AssemblyName System.Windows.Forms
+$ok = $false
+for ($i = 0; $i -lt 8 -and -not $ok; $i++) {
+  try {
+    if ([System.Windows.Forms.Clipboard]::ContainsImage()) { "image"; exit 0 }
+    if ([System.Windows.Forms.Clipboard]::ContainsText()) {
+      $t = [System.Windows.Forms.Clipboard]::GetText().Trim()
+      if ($t -match "^[A-Za-z]:\\.*\.(png|jpg|jpeg|webp|bmp)$" -and (Test-Path $t)) { "path"; exit 0 }
+    }
+    $ok = $true
+  } catch {
+    Start-Sleep -Milliseconds 150
+  }
+}
+exit 1
+' 2>/dev/null | tr -d '\r'
+}
+
+save_clipboard() {
+  "$ps" -NoProfile -STA -ExecutionPolicy Bypass -Command '
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+$dir = Join-Path $env:TEMP "wsl-clipboard-images"
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+for ($i = 0; $i -lt 10; $i++) {
+  try {
+    if ([System.Windows.Forms.Clipboard]::ContainsImage()) {
+      $img = [System.Windows.Forms.Clipboard]::GetImage()
+      $out = Join-Path $dir ("clipboard-" + [guid]::NewGuid().ToString() + ".png")
+      $img.Save($out, [System.Drawing.Imaging.ImageFormat]::Png)
+      $img.Dispose()
+      $out
+      exit 0
+    }
+    if ([System.Windows.Forms.Clipboard]::ContainsText()) {
+      $t = [System.Windows.Forms.Clipboard]::GetText().Trim()
+      if ($t -match "^[A-Za-z]:\\.*\.(png|jpg|jpeg|webp|bmp)$" -and (Test-Path $t)) {
+        $t
+        exit 0
+      }
+    }
+    exit 1
+  } catch {
+    Start-Sleep -Milliseconds 150
+  }
+}
+exit 1
+' 2>/dev/null | tr -d '\r' | tail -n 1
+}
+
+case "$mode" in
+  probe)
+    probe_clipboard >/dev/null
+    ;;
+  path)
+    save_clipboard | while IFS= read -r win_path; do
+      win_to_wsl_path "$win_path"
+    done
+    ;;
+  save)
+    wsl_path="$(save_clipboard | while IFS= read -r win_path; do win_to_wsl_path "$win_path"; done)"
+    [ -n "$wsl_path" ] && [ -f "$wsl_path" ]
+    printf '%s\n' "$wsl_path"
+    ;;
+  *)
+    printf 'usage: win-clipboard-image [probe|path|save]\n' >&2
+    exit 2
+    ;;
+esac

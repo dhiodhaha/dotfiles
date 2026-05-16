@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+set -eu
+
+win_launcher="/mnt/c/Users/dopamine/AppData/Local/Programs/Antigravity/bin/antigravity"
+
+if [ -f "$win_launcher" ]; then
+  sed -i 's/ms-vscode-remote.remote-wsl/google.antigravity-remote-wsl/g' "$win_launcher"
+fi

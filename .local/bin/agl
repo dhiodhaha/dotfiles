@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+export DONT_PROMPT_WSL_INSTALL=1
+
+# Fallback only: WSL-native Linux Antigravity has shown login/click issues here.
+export ELECTRON_OZONE_PLATFORM_HINT=x11
+export GDK_BACKEND=x11
+export NO_AT_BRIDGE=1
+
+exec "$HOME/.local/opt/antigravity-linux/bin/antigravity" \
+  --ozone-platform=x11 \
+  "$@"

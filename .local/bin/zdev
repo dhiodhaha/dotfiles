@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${ZELLIJ:-}" ]]; then
+  exec zellij run --name nvim -- nvim "$@"
+fi
+
+if [[ "$#" -gt 0 ]]; then
+  cd "$1"
+fi
+
+exec zellij --layout nvim

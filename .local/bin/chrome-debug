@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+chrome="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+profile_win="C:\\Users\\dopamine\\AppData\\Local\\Google\\Chrome\\CodexDevToolsProfile"
+port="${CHROME_DEBUG_PORT:-9222}"
+
+if ! command -v curl >/dev/null 2>&1 || ! curl -fsS "http://127.0.0.1:${port}/json/version" >/dev/null 2>&1; then
+  "$chrome" \
+    --remote-debugging-port="$port" \
+    --remote-debugging-address=0.0.0.0 \
+    --remote-allow-origins="*" \
+    --user-data-dir="$profile_win" \
+    --no-first-run \
+    --no-default-browser-check \
+    about:blank >/dev/null 2>&1 &
+fi
+
+for _ in {1..200}; do
+  if curl -fsS "http://127.0.0.1:${port}/json/version" >/dev/null 2>&1; then
+    printf 'Chrome DevTools is ready at http://127.0.0.1:%s\n' "$port"
+    exit 0
+  fi
+  sleep 0.1
+done
+
+printf 'Chrome DevTools did not become ready at http://127.0.0.1:%s\n' "$port" >&2
+exit 1

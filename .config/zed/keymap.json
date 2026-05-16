@@ -1,0 +1,10 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-`": "workspace::ToggleBottomDock",
+      "ctrl-shift-g": "git_panel::ToggleFocus",
+      "ctrl-shift-t": "workspace::NewTerminal"
+    }
+  }
+]
