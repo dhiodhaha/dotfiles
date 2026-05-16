@@ -5,6 +5,12 @@ chrome="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
 profile_win="C:\\Users\\dopamine\\AppData\\Local\\Google\\Chrome\\CodexDevToolsProfile"
 port="${CHROME_DEBUG_PORT:-9222}"
 
+if [[ ! -x "$chrome" ]]; then
+  printf 'chrome-debug is configured for WSL/Windows Chrome and was not found at:\n%s\n' "$chrome" >&2
+  printf 'On macOS, start Chrome with: open -na \"Google Chrome\" --args --remote-debugging-port=%s --user-data-dir=\"$HOME/.cache/chrome-codex-devtools\"\n' "$port" >&2
+  exit 1
+fi
+
 if ! command -v curl >/dev/null 2>&1 || ! curl -fsS "http://127.0.0.1:${port}/json/version" >/dev/null 2>&1; then
   "$chrome" \
     --remote-debugging-port="$port" \

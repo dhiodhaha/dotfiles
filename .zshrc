@@ -152,7 +152,11 @@ command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 alias ls='eza --group-directories-first --icons=auto'
 alias ll='eza -la --group-directories-first --icons=auto --git'
 alias lt='eza --tree --level=2 --group-directories-first --icons=auto'
-alias cat='batcat --paging=never'
+if command -v batcat >/dev/null 2>&1; then
+  alias cat='batcat --paging=never'
+elif command -v bat >/dev/null 2>&1; then
+  alias cat='bat --paging=never'
+fi
 alias lg='lazygit'
 alias yz='yazi'
 alias grep='rg'

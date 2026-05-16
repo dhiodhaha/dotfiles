@@ -46,8 +46,17 @@ if ! command -v rtk >/dev/null 2>&1; then
   curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/master/install.sh | sh
 fi
 
-echo "Done. Open a new terminal or run: source ~/.zshrc"
+if ! command -v yt-dlp >/dev/null 2>&1; then
+  mkdir -p "$HOME/.local/bin"
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v brew >/dev/null 2>&1; then
+    brew install yt-dlp ffmpeg
+  else
+    curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$HOME/.local/bin/yt-dlp"
+    chmod +x "$HOME/.local/bin/yt-dlp"
+  fi
+fi
 
+echo "Done. Open a new terminal or run: source ~/.zshrc"
 
 
 

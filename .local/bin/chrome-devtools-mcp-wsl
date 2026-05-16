@@ -4,6 +4,12 @@ set -euo pipefail
 port="${CHROME_DEBUG_PORT:-9222}"
 "$HOME/.local/bin/chrome-debug" >/dev/null
 
+if [[ "$OSTYPE" == darwin* ]]; then
+  exec npx -y chrome-devtools-mcp@latest \
+    --browserUrl "http://127.0.0.1:${port}" \
+    --no-usage-statistics
+fi
+
 host_ip="$(ip route | awk '/^default / {print $3; exit}')"
 if [[ -z "$host_ip" ]]; then
   host_ip="127.0.0.1"

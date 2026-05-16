@@ -9,6 +9,8 @@ small, visible, and easy to delete.
 
 ## Restore On A New Device
 
+### Windows + WSL
+
 1. Install Windows apps:
 
 ```powershell
@@ -48,6 +50,35 @@ codex --version
 docker --version
 ```
 
+### macOS
+
+Core Neovim, Zellij, zsh, Codex, LazyVim, Obsidian and terminal tooling are
+portable to macOS. The Windows/WSL launchers are intentionally guarded and will
+print a clear message if used outside WSL.
+
+Install base tools:
+
+```bash
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install git curl zsh keychain fd ripgrep bat eza fzf zoxide direnv neovim zellij lazygit glow yazi marksman node ffmpeg yt-dlp
+git clone git@github.com:dhiodhaha/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install.sh
+```
+
+macOS differences:
+
+- `agw`, `agy`, `agl` and `patch-antigravity-wsl` are WSL/Windows helpers.
+- `chrome-debug` is configured for Windows Chrome from WSL. On macOS, run:
+
+```bash
+open -na "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir="$HOME/.cache/chrome-codex-devtools"
+```
+
+- Update `.codex/config.toml` if you want Chrome DevTools MCP to use macOS
+  `npx` directly instead of Windows `cmd.exe`.
+
 ## Daily Commands
 
 ```bash
@@ -58,7 +89,52 @@ agy .           # alias path to Antigravity
 agl .           # fallback Linux Antigravity build only
 chrome-debug    # start Windows Chrome with DevTools remote debugging
 rtk git status  # compact token-saving command output
+yt-dlp URL      # download video/audio
 ```
+
+## Productivity Ladder
+
+Fun and comfort:
+
+```bash
+fastfetch       # system summary
+btop            # beautiful process monitor
+glow README.md  # markdown preview in terminal
+cowsay "ship it"
+lolcat          # rainbow output for fun commands
+```
+
+Navigation and files:
+
+```bash
+z project       # zoxide smart cd
+ff              # fuzzy-find file and open in nvim
+yz              # yazi file manager
+lt              # eza tree
+rg text         # fast search
+fd name         # fast find
+```
+
+Git and code:
+
+```bash
+lg              # lazygit
+gh              # GitHub CLI
+rtk git diff    # token-efficient output
+nvim            # LazyVim
+```
+
+Serious daily tools:
+
+```bash
+zdev            # Zellij dev layout
+zn              # Zellij + Neovim
+codex           # coding agent
+docker ps       # containers
+direnv allow    # per-project env vars
+```
+
+Rule: keep fun tools optional, but make serious tools muscle memory.
 
 ## Terminal Workflow
 

@@ -4,6 +4,11 @@ set -euo pipefail
 app="/mnt/c/Users/dopamine/AppData/Local/Programs/Antigravity/Antigravity.exe"
 distro="${WSL_DISTRO_NAME:-Ubuntu}"
 
+if [[ ! -x "$app" ]]; then
+  printf 'agw is WSL/Windows-only. Antigravity.exe was not found at:\n%s\n' "$app" >&2
+  exit 1
+fi
+
 if [[ $# -eq 0 ]]; then
   set -- .
 fi
