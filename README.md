@@ -91,6 +91,8 @@ chrome-debug    # start Windows Chrome with DevTools remote debugging
 rtk git status  # compact token-saving command output
 yt-dlp URL      # download video/audio
 fastfetch       # system summary with Frieren logo
+nix develop     # enter a reproducible project shell
+nix shell nixpkgs#tool -c tool --help
 ```
 
 ## Productivity Ladder
@@ -136,6 +138,40 @@ direnv allow    # per-project env vars
 ```
 
 Rule: keep fun tools optional, but make serious tools muscle memory.
+
+## Nix Project Workflow
+
+Nix is optional for the dotfiles themselves, but recommended for project
+environments where local and CI should use the same tools.
+
+Install Nix with the official multi-user installer:
+
+```bash
+sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --daemon
+```
+
+After install, open a new terminal. This dotfiles repo links
+`.config/nix/nix.conf`, which enables flakes.
+
+For a new agent-friendly project, copy the template files:
+
+```bash
+cp ~/dotfiles/templates/agent-nix-project/flake.nix .
+cp ~/dotfiles/templates/agent-nix-project/justfile .
+cp ~/dotfiles/templates/agent-nix-project/AGENTS.md .
+cp ~/dotfiles/templates/agent-nix-project/.envrc .
+mkdir -p .github/workflows
+cp ~/dotfiles/templates/agent-nix-project/github-actions-nix.yml .github/workflows/ci.yml
+```
+
+Then use one local gate before pushing:
+
+```bash
+nix develop -c just ci
+```
+
+The goal is not to make every dotfile a Nix module. The goal is to make each
+project easy for you and agents to verify the same way CI verifies it.
 
 ## Terminal Workflow
 

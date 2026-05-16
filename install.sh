@@ -24,6 +24,7 @@ link_file "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 link_file "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
 link_file "$DOTFILES_DIR/.markdownlint.json" "$HOME/.markdownlint.json"
 link_file "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
+link_file "$DOTFILES_DIR/.config/nix" "$HOME/.config/nix"
 link_file "$DOTFILES_DIR/.config/zellij" "$HOME/.config/zellij"
 link_file "$DOTFILES_DIR/.config/zed" "$HOME/.config/zed"
 link_file "$DOTFILES_DIR/.config/fastfetch" "$HOME/.config/fastfetch"
@@ -77,4 +78,3 @@ if ! command -v fastfetch >/dev/null 2>&1; then
 fi
 
 echo "Done. Open a new terminal or run: source ~/.zshrc"
-
