@@ -82,6 +82,16 @@ fi
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use web-search)
 
+# Predictable tab completion for paths and commands.
+setopt AUTO_LIST AUTO_PARAM_SLASH COMPLETE_IN_WORD LIST_TYPES
+unsetopt MENU_COMPLETE
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[-_./]=* r:|=*'
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+zstyle ':completion:*:descriptions' format '%F{cyan}%d%f'
+zstyle ':completion:*:warnings' format '%F{yellow}No matches%f'
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
