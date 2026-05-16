@@ -153,9 +153,13 @@ typeset -U path
 export PATH
 
 # Do not prompt for SSH key passphrases on every new terminal tab.
-# Keychain will reuse already-loaded keys and silently skip locked keys.
+# Keychain prompts once in a real terminal, then Codex/Git reuse the loaded key.
 if command -v keychain >/dev/null 2>&1; then
-  eval "$(keychain --eval --quick --quiet --noask --agents ssh id_rsa id_ed25519 2>/dev/null)"
+  if [[ -o interactive ]]; then
+    eval "$(keychain --eval --quick --quiet --agents ssh id_ed25519 id_rsa 2>/dev/null)"
+  else
+    eval "$(keychain --eval --quick --quiet --noask --agents ssh id_ed25519 id_rsa 2>/dev/null)"
+  fi
 fi
 
 export EDITOR=nvim

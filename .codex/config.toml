@@ -1,7 +1,18 @@
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
 [projects."/home/dhio"]
 trust_level = "trusted"
 
 [projects."/home/dhio/activeproject/invitasi-app/wordpress-research-titan"]
+trust_level = "trusted"
+
+[projects."/home/dhio/activeproject/wordpress-research-titan"]
+trust_level = "trusted"
+
+[projects."/home/dhio/activeproject/marketingimpostorgame"]
+trust_level = "trusted"
+
+[projects."/home/dhio/activeproject/invitasi-app-prototype"]
 trust_level = "trusted"
 
 [tui]
@@ -9,7 +20,7 @@ theme = "linear-dark-dhio"
 use_theme_colors = true
 
 [tui.model_availability_nux]
-"gpt-5.5" = 3
+"gpt-5.5" = 4
 
 [plugins."figma@openai-curated"]
 enabled = true
@@ -32,3 +43,11 @@ url = "https://mcp.figma.com/mcp"
 [mcp_servers.chrome-devtools]
 command = "/mnt/c/Windows/System32/cmd.exe"
 args = ["/c", "npx.cmd", "-y", "chrome-devtools-mcp@latest", "--browserUrl", "http://127.0.0.1:9222", "--no-usage-statistics"]
+
+[mcp_servers.uidotsh]
+enabled = false
+url = "https://ui.sh/mcp?agent=codex"
+bearer_token_env_var = "UIDOTSH_TOKEN"
+
+[mcp_servers.uidotsh.tools.uidotsh_fetch]
+approval_mode = "approve"
