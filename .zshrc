@@ -90,6 +90,8 @@ source $ZSH/oh-my-zsh.sh
 path=(
   "$HOME/.local/bin"
   "$HOME/.grit/bin"
+  "$HOME/.nix-profile/bin"
+  /nix/var/nix/profiles/default/bin
   /usr/local/sbin
   /usr/local/bin
   /usr/sbin

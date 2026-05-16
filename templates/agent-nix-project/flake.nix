@@ -26,10 +26,13 @@
     {
       devShells = forAllSystems (
         { pkgs }:
+        let
+          nodejs = if pkgs ? nodejs_26 then pkgs.nodejs_26 else pkgs.nodejs_latest;
+        in
         {
           default = pkgs.mkShell {
             packages = [
-              (pkgs.nodejs_26 or pkgs.nodejs_latest)
+              nodejs
               pkgs.corepack
               pkgs.bun
               pkgs.just
@@ -51,3 +54,4 @@
         }
       );
     };
+}
