@@ -56,8 +56,19 @@ if ! command -v yt-dlp >/dev/null 2>&1; then
   fi
 fi
 
-echo "Done. Open a new terminal or run: source ~/.zshrc"
+if ! command -v fastfetch >/dev/null 2>&1; then
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v brew >/dev/null 2>&1; then
+    brew install fastfetch
+  else
+    tmp="$(mktemp -d)"
+    curl -L https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.tar.gz -o "$tmp/fastfetch.tar.gz"
+    tar -xzf "$tmp/fastfetch.tar.gz" -C "$tmp"
+    install -m 0755 "$(find "$tmp" -maxdepth 4 -type f -name fastfetch | head -n1)" "$HOME/.local/bin/fastfetch"
+    rm -rf "$tmp"
+  fi
+fi
 
+echo "Done. Open a new terminal or run: source ~/.zshrc"
 
 
 
