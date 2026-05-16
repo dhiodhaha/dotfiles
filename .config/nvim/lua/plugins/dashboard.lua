@@ -5,14 +5,28 @@ return {
       opts.dashboard = opts.dashboard or {}
       opts.dashboard.preset = opts.dashboard.preset or {}
       opts.dashboard.preset.header = [[
-        ______     _                     
-       |  ____|   (_)                    
-       | |__ _ __  _  ___ _ __ ___ _ __  
-       |  __| '__|| |/ _ \ '__/ _ \ '_ \ 
-       | |  | |   | |  __/ | |  __/ | | |
-       |_|  |_|   |_|\___|_|  \___|_| |_|
+              .-""""-.
+             /  .--.  \
+            /  /    \  \
+            | |  /\  | |
+            | |  \/  | |
+            \  \____/  /
+             '._    _.'
+                /`  `\
+           _.-''  /\  ''-._
+        .-'      /  \      '-.
+       /   _    /____\    _   \
+      /   / \    |  |    / \   \
+      |  |   |   |  |   |   |  |
+      |  |   |   |  |   |   |  |
+      \  \__/    |  |    \__/  /
+       '._    ___|  |___    _.'
+          '-./___    ___\.-'
+                |    |
+              __|    |__
+             /__|____|__\
 
-            flowers, spells, and small commits
+          long-lived mage, short-lived bugs
       ]]
     end,
   },
