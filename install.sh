@@ -7,6 +7,13 @@ link_file() {
   local src="$1"
   local dst="$2"
   mkdir -p "$(dirname "$dst")"
+  if [[ -e "$dst" ]] && [[ "$(realpath "$src")" == "$(realpath "$dst")" ]]; then
+    return
+  fi
+  if [[ -d "$dst" && ! -L "$dst" ]]; then
+    echo "Skipping existing directory: $dst"
+    return
+  fi
   ln -sfn "$src" "$dst"
 }
 
@@ -19,6 +26,7 @@ link_file "$DOTFILES_DIR/.markdownlint.json" "$HOME/.markdownlint.json"
 link_file "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
 link_file "$DOTFILES_DIR/.config/zellij" "$HOME/.config/zellij"
 link_file "$DOTFILES_DIR/.config/zed" "$HOME/.config/zed"
+link_file "$DOTFILES_DIR/.config/fastfetch" "$HOME/.config/fastfetch"
 link_file "$DOTFILES_DIR/.config/lazygit" "$HOME/.config/lazygit"
 link_file "$DOTFILES_DIR/.config/glow" "$HOME/.config/glow"
 link_file "$DOTFILES_DIR/.config/git" "$HOME/.config/git"
@@ -69,7 +77,4 @@ if ! command -v fastfetch >/dev/null 2>&1; then
 fi
 
 echo "Done. Open a new terminal or run: source ~/.zshrc"
-
-
-
 

@@ -90,6 +90,7 @@ agl .           # fallback Linux Antigravity build only
 chrome-debug    # start Windows Chrome with DevTools remote debugging
 rtk git status  # compact token-saving command output
 yt-dlp URL      # download video/audio
+fastfetch       # system summary with Frieren logo
 ```
 
 ## Productivity Ladder
@@ -193,6 +194,7 @@ This config intentionally stays close to LazyVim defaults:
 Kept Craftzdog-inspired polish:
 
 - Catppuccin Mocha with Linear-style color overrides;
+- Frieren startup dashboard art adapted from derangga/dotfiles;
 - Snacks picker shortcuts;
 - simple incline buffer label;
 - Zellij plus Neovim workflow;
