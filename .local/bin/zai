@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -n "${ZELLIJ:-}" ]]; then
+  exec zellij action new-tab --layout ai
+fi
+
+if [[ "$#" -gt 0 ]]; then
+  cd "$1"
+fi
+
+project="$(basename "$(git rev-parse --show-toplevel 2>/dev/null || pwd)")"
+session="ai-${project//[^A-Za-z0-9_.-]/-}"
+
+exec zellij --session "$session" --layout ai

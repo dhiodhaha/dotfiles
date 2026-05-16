@@ -84,6 +84,7 @@ open -na "Google Chrome" --args --remote-debugging-port=9222 --user-data-dir="$H
 ```bash
 zn              # zellij + nvim workspace
 zdev            # zellij dev layout
+zai             # zellij AI workspace: code/codex/claude/dev/git tabs
 agw .           # Windows Antigravity into current WSL project
 agy .           # alias path to Antigravity
 agl .           # fallback Linux Antigravity build only
@@ -183,7 +184,24 @@ cd ~/my-project
 zn
 ```
 
-Inside Zellij, use separate panes for editor, agent and server:
+For AI orchestration, prefer:
+
+```bash
+cd ~/my-project
+zai
+```
+
+`zai` creates a named Zellij session from the project folder and opens smart tabs:
+
+```text
+code    nvim
+codex   Codex CLI
+claude  Claude CLI
+dev     shell for server/tests
+git     lazygit
+```
+
+Inside a manual Zellij session, use separate panes for editor, agent and server:
 
 ```text
 pane 1: nvim

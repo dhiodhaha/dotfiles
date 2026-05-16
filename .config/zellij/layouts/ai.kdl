@@ -1,0 +1,32 @@
+layout {
+    tab name="code" focus=true {
+        pane command="nvim"
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+    }
+    tab name="codex" {
+        pane command="codex"
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+    }
+    tab name="claude" {
+        pane command="claude"
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+    }
+    tab name="dev" {
+        pane
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+    }
+    tab name="git" {
+        pane command="lazygit"
+        pane size=1 borderless=true {
+            plugin location="compact-bar"
+        }
+    }
+}

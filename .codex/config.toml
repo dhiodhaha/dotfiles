@@ -1,12 +1,15 @@
 [projects."/home/dhio"]
 trust_level = "trusted"
 
+[projects."/home/dhio/activeproject/invitasi-app/wordpress-research-titan"]
+trust_level = "trusted"
+
 [tui]
 theme = "linear-dark-dhio"
 use_theme_colors = true
 
 [tui.model_availability_nux]
-"gpt-5.5" = 1
+"gpt-5.5" = 3
 
 [plugins."figma@openai-curated"]
 enabled = true
@@ -17,6 +20,7 @@ enabled = true
 [mcp_servers.serena]
 command = "uvx"
 args = ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server", "--context", "codex"]
+startup_timeout_sec = 120
 
 [mcp_servers.caveman-mcp]
 command = "uvx"
