@@ -7,3 +7,6 @@ local map = vim.keymap.set
 -- <leader>u, diagnostics, formatting and quit mappings.
 map("n", "<leader>yP", '"0p', { desc = "Paste Register 0" })
 map("v", "<leader>yP", '"0p', { desc = "Paste Register 0" })
+map({ "n", "v" }, "<leader>cf", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format" })
